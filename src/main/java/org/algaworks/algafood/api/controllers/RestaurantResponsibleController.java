@@ -3,6 +3,7 @@ package org.algaworks.algafood.api.controllers;
 import lombok.AllArgsConstructor;
 import org.algaworks.algafood.api.mapper.UserMapper;
 import org.algaworks.algafood.api.models.UserModel;
+import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.services.RestaurantService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class RestaurantResponsibleController {
     private RestaurantService restaurantService;
     private UserMapper userMapper;
 
+    @CheckSecurity.Restaurant.Consult
     @GetMapping
     public ResponseEntity<Set<UserModel>> findAllResponsible(@PathVariable Long restaurantId) {
         Set<UserModel> responsible = restaurantService.findAllResponsible(restaurantId).stream()
@@ -26,12 +28,14 @@ public class RestaurantResponsibleController {
         return ResponseEntity.ok(responsible);
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PutMapping("/{responsibleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addResponsible(@PathVariable Long restaurantId, @PathVariable Long responsibleId) {
         restaurantService.addResponsible(restaurantId, responsibleId);
     }
 
+    @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/{responsibleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeResponsible(@PathVariable Long restaurantId, @PathVariable Long responsibleId) {

@@ -8,6 +8,7 @@ import org.algaworks.algafood.api.models.RestaurantModel;
 import org.algaworks.algafood.api.models.RestaurantSimpleModel;
 import org.algaworks.algafood.api.models.input.AddressInput;
 import org.algaworks.algafood.api.models.input.RestaurantInput;
+import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.exceptions.BusinessException;
 import org.algaworks.algafood.domain.exceptions.CityNotFoundException;
 import org.algaworks.algafood.domain.exceptions.KitchenNotFoundException;
@@ -32,28 +33,34 @@ public class RestaurantController {
     private final RestaurantMapper restaurantMapper;
     private final AddressMapper addressMapper;
 
+    @CheckSecurity.Restaurant.Consult
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantModel> findById(@PathVariable Long id) {
         return ResponseEntity.ok(restaurantMapper.toRestaurantModel(restaurantService.findById(id)));
     }
 
+    @CheckSecurity.Restaurant.Consult
     @GetMapping(path = "/by-name", params = "name")
-    public ResponseEntity<Page<RestaurantSimpleModel>> findByLikeName(@RequestParam String name, @PageableDefault Pageable pageable) {
+    public ResponseEntity<Page<RestaurantSimpleModel>> findByLikeName(@RequestParam String name,
+                                                                      @PageableDefault Pageable pageable) {
         Page<Restaurant> restaurantModelPage = restaurantService.findByLikeName(name, pageable);
         return ResponseEntity.ok(restaurantModelPage.map(restaurantMapper::toRestaurantSimpleModel));
     }
 
+    @CheckSecurity.Restaurant.Consult
     @GetMapping
     public ResponseEntity<Page<RestaurantSimpleModel>> findAll(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(restaurantService.findAll(pageable).map(restaurantMapper::toRestaurantSimpleModel));
     }
 
+    @CheckSecurity.Restaurant.Consult
     @GetMapping("/free-delivery")
     public ResponseEntity<Page<RestaurantSimpleModel>> restaurantsWithFreeDelivery(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(restaurantService.restaurantsWithFreeDelivery(pageable)
                 .map(restaurantMapper::toRestaurantSimpleModel));
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PostMapping
     public ResponseEntity<RestaurantSimpleModel> add(@RequestBody @Valid RestaurantInput restaurantInput) {
         try {
@@ -64,8 +71,10 @@ public class RestaurantController {
         }
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PutMapping("/{id}")
-    public ResponseEntity<RestaurantSimpleModel> update(@PathVariable Long id, @Valid @RequestBody RestaurantInput restaurantInput) {
+    public ResponseEntity<RestaurantSimpleModel> update(@PathVariable Long id,
+                                                        @Valid @RequestBody RestaurantInput restaurantInput) {
         try {
             Restaurant restaurant = restaurantService.findById(id);
             restaurantMapper.copyToDomainObject(restaurantInput, restaurant);
@@ -75,18 +84,21 @@ public class RestaurantController {
         }
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PutMapping("/{id}/active")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activate(@PathVariable Long id) {
         restaurantService.activate(id);
     }
 
+    @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/{id}/active")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inactivate(@PathVariable Long id) {
         restaurantService.inactivate(id);
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PutMapping("/active-multiples")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activateMultiples(@RequestBody List<Long> restaurantIds) {
@@ -97,6 +109,7 @@ public class RestaurantController {
         }
     }
 
+    @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/active-multiples")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inactivateMultiples(@RequestBody List<Long> restaurantIds) {
@@ -107,20 +120,24 @@ public class RestaurantController {
         }
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PutMapping("/{id}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void opening(@PathVariable Long id) {
         restaurantService.opening(id);
     }
 
+    @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/{id}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closing(@PathVariable Long id) {
         restaurantService.closing(id);
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PutMapping("/{id}/update-address")
-    public ResponseEntity<RestaurantModel> updateAddress(@PathVariable Long id, @Valid @RequestBody AddressInput addressInput) {
+    public ResponseEntity<RestaurantModel> updateAddress(@PathVariable Long id,
+                                                         @Valid @RequestBody AddressInput addressInput) {
         try {
             Restaurant restaurant = restaurantService.updateAddress(id, addressMapper.toAddress(addressInput));
             return ResponseEntity.ok(restaurantMapper.toRestaurantModel(restaurant));
@@ -129,6 +146,7 @@ public class RestaurantController {
         }
     }
 
+    @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {

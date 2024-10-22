@@ -27,6 +27,7 @@ insert into tb_user(id, name, email, password, registration_date) values (2, "Ma
 insert into tb_user(id, name, email, password, registration_date) values (3, "Ana Martins", "AnaMartins@email.com", "$2a$12$VdtSHeqF1aMjP8YGVXDkAeN1M5c4rq7InkY6bB17yjTc.SniqNDvO", utc_timestamp);
 insert into tb_user(id, name, email, password, registration_date) values (4, "José Mattos", "JoséMattos@email.com", "$2a$12$VdtSHeqF1aMjP8YGVXDkAeN1M5c4rq7InkY6bB17yjTc.SniqNDvO", utc_timestamp);
 insert into tb_user(id, name, email, password, registration_date) values (5, "Carla Rodrigues", "CarlaRodrigues@email.com", "$2a$12$VdtSHeqF1aMjP8YGVXDkAeN1M5c4rq7InkY6bB17yjTc.SniqNDvO", utc_timestamp);
+insert into tb_user(id, name, email, password, registration_date) values (6, "Thais Sousa", "ThaisSousa@email.com", "$2a$12$VdtSHeqF1aMjP8YGVXDkAeN1M5c4rq7InkY6bB17yjTc.SniqNDvO", utc_timestamp);
 
 insert into tb_permission(id, name, description) values (1, "CONSULT_KITCHEN","allows to consult kitchens");
 insert into tb_permission(id, name, description) values (2, "EDIT_KITCHEN","allows to create and edit kitchens");

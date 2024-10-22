@@ -3,6 +3,7 @@ package org.algaworks.algafood.api.controllers;
 import lombok.AllArgsConstructor;
 import org.algaworks.algafood.api.mapper.PaymentMethodMapper;
 import org.algaworks.algafood.api.models.PaymentMethodModel;
+import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.models.PaymentMethod;
 import org.algaworks.algafood.domain.services.RestaurantService;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class RestaurantPaymentController {
     private final RestaurantService restaurantService;
     private final PaymentMethodMapper paymentMethodMapper;
 
+    @CheckSecurity.Restaurant.Consult
     @GetMapping
     public ResponseEntity<Set<PaymentMethodModel>> findAllPaymentsMethods(@PathVariable Long restaurantId) {
         Set<PaymentMethod> allPaymentMethods = restaurantService.findAllPaymentMethods(restaurantId);
@@ -27,12 +29,14 @@ public class RestaurantPaymentController {
                 .collect(Collectors.toSet()));
     }
 
+    @CheckSecurity.Restaurant.Edit
     @PutMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void attachPaymentMethod(@PathVariable Long restaurantId, @PathVariable Long paymentMethodId) {
         restaurantService.attachPaymentMethod(restaurantId, paymentMethodId);
     }
 
+    @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void detachPaymentMethod(@PathVariable Long restaurantId, @PathVariable Long paymentMethodId) {

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,12 +64,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handlerAccessDinedException(AccessDeniedException ex, WebRequest request) {
+        Problem problem = createProblemBuilder(HttpStatus.FORBIDDEN, FORBIDDEN, ProblemMessage.FORBIDDEN.getMessage()).build();
+        return handleExceptionInternal(ex, problem, HttpHeaders.EMPTY, HttpStatus.FORBIDDEN, request);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> exception(Exception ex, WebRequest request) {
 
         Problem problem = createProblemBuilder(HttpStatus.INTERNAL_SERVER_ERROR, SYSTEM_ERROR,
                 ProblemMessage.SYSTEM_ERROR.getMessage()).build();
-
         ex.printStackTrace();
         return handleExceptionInternal(ex, problem, HttpHeaders.EMPTY, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }

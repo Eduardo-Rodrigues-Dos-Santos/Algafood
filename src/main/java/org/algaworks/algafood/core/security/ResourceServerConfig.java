@@ -44,6 +44,4 @@ public class ResourceServerConfig {
         });
         return jwtAuthenticationConverter;
     }
-
-
 }

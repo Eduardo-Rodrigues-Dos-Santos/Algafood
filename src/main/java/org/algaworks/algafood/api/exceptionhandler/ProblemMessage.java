@@ -10,8 +10,8 @@ public enum ProblemMessage {
     INVALID_URL_PARAMETER("The URL parameter %s received the value '%s' which is invalid, please enter a value compatible with Long."),
     NON_EXISTENT_RESOURCE("Resource %s non-existent."),
     SYSTEM_ERROR("An unexpected internal error has occurred. Try again and if the problem persists, contact your system administrator."),
-    INVALID_DATA("One or more fields are invalid, fill them in correctly and try again.");
-
+    INVALID_DATA("One or more fields are invalid, fill them in correctly and try again."),
+    FORBIDDEN("You do not have permission to perform this operation.");
     private String message;
 
     ProblemMessage(String message) {
