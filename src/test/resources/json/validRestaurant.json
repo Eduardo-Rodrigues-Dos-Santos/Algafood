@@ -1,0 +1,11 @@
+{
+  "name": "Pobre Juan",
+  "kitchenId": 1,
+  "address": {
+    "cityId": 1,
+    "postalCode": "69919703",
+    "number": "33",
+    "complement": "próximo a algum lugar",
+    "district": "Central"
+  }
+}

@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://172.19.0.2/alga_food?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: alga
+    password: toor
+
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+
+  flyway:
+    locations:
+      - classpath:db/migration
+#      - classpath:test-data
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      format-sql: true
+
+  web:
+    resources:
+      add-mappings: false

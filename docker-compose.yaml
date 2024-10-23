@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: 'alga_food'
+      MYSQL_ROOT_PASSWORD: 'kitkat'
+      MYSQL_USER: 'alga'
+      MYSQL_PASSWORD: 'toor'
+    ports:
+      - "3306:3306"
+    volumes:
+      - 'db1_alga_food/var/lib/alga_food'
+
+volumes:
+  db1_alga_food:
