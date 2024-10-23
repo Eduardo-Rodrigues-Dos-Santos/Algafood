@@ -22,6 +22,7 @@ public class RestaurantInput {
     @Positive
     private Long kitchenId;
 
+    @NotNull
     @PositiveOrZero
     private BigDecimal shippingFee;
 

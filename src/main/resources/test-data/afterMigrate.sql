@@ -48,7 +48,7 @@ insert into tb_permission(id, name, description) values (16, "MANAGE_ORDER","all
 insert into tb_permission(id, name, description) values (17, "CREATE_REPORT","allows to create reports");
 
 insert into tb_group(id, name) values (1, "manager");
-insert into tb_group(id, name) values (2, "eller");
+insert into tb_group(id, name) values (2, "seller");
 insert into tb_group(id, name) values (3, "assistant");
 insert into tb_group(id, name) values (4, "registrar");
 
@@ -109,12 +109,6 @@ insert into tb_product(name, description, active, restaurant_id, value) values (
 insert into tb_product(name, description, active, restaurant_id, value) values ("Salada de feijão fradinho simples", " Feita com feijão fradinho cozido, tomate, cebola e coentro, é uma opção saudável e rica em proteínas.", true, 6, 25.00);
 insert into tb_product(name, description, active, restaurant_id, value) values ("Salada de brócolis com figo", "Feita com brócolis cozido al dente, figos frescos fatiados, queijo feta esfarelado e nozes picadas, é uma opção saudável e deliciosa para qualquer refeição.", true, 1, 22.00);
 insert into tb_product(name, description, active, restaurant_id, value) values ("Escondidinho de carne moída", "Feito com uma camada de purê de mandioca, uma camada de carne moída refogada e coberto com queijo derretido, é uma opção reconfortante e deliciosa para qualquer ocasião.", true, 2, 33.00);
-
-insert into tb_group_permission(group_id, permission_id) values (1, 1);
-insert into tb_group_permission(group_id, permission_id) values (1, 2);
-insert into tb_group_permission(group_id, permission_id) values (2, 1);
-insert into tb_group_permission(group_id, permission_id) values (2, 2);
-insert into tb_group_permission(group_id, permission_id) values (3, 2);
 
 insert into tb_user_group(user_id, group_id) values (1, 1);
 insert into tb_user_group(user_id, group_id) values (1, 2);

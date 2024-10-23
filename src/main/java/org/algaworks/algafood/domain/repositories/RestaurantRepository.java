@@ -22,4 +22,8 @@ public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Lo
     @Query("select r from Restaurant r left join fetch r.address.city " +
             "left join fetch r.address.city.state left join fetch r.kitchen where r.id = :id")
     Optional<Restaurant> findById(@Param("id") Long id);
+
+    @Query("select case when exists(select 1 from Restaurant r join r.responsible responsible " +
+            "where r.id = :restaurantId and responsible.id = :responsibleId) then true else false end")
+    Boolean existsResponsible(@Param("restaurantId") Long restaurantId, @Param("responsibleId") Long responsibleId);
 }

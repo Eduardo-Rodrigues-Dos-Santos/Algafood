@@ -34,9 +34,9 @@ public class RestaurantController {
     private final AddressMapper addressMapper;
 
     @CheckSecurity.Restaurant.Consult
-    @GetMapping("/{id}")
-    public ResponseEntity<RestaurantModel> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(restaurantMapper.toRestaurantModel(restaurantService.findById(id)));
+    @GetMapping("/{restaurantId}")
+    public ResponseEntity<RestaurantModel> findById(@PathVariable Long restaurantId) {
+        return ResponseEntity.ok(restaurantMapper.toRestaurantModel(restaurantService.findById(restaurantId)));
     }
 
     @CheckSecurity.Restaurant.Consult
@@ -72,11 +72,11 @@ public class RestaurantController {
     }
 
     @CheckSecurity.Restaurant.Edit
-    @PutMapping("/{id}")
-    public ResponseEntity<RestaurantSimpleModel> update(@PathVariable Long id,
+    @PutMapping("/{restaurantId}")
+    public ResponseEntity<RestaurantSimpleModel> update(@PathVariable Long restaurantId,
                                                         @Valid @RequestBody RestaurantInput restaurantInput) {
         try {
-            Restaurant restaurant = restaurantService.findById(id);
+            Restaurant restaurant = restaurantService.findById(restaurantId);
             restaurantMapper.copyToDomainObject(restaurantInput, restaurant);
             return ResponseEntity.ok(restaurantMapper.toRestaurantSimpleModel(restaurantService.add(restaurant)));
         } catch (CityNotFoundException | KitchenNotFoundException e) {
@@ -85,17 +85,17 @@ public class RestaurantController {
     }
 
     @CheckSecurity.Restaurant.Edit
-    @PutMapping("/{id}/active")
+    @PutMapping("/{restaurantId}/active")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void activate(@PathVariable Long id) {
-        restaurantService.activate(id);
+    public void activate(@PathVariable Long restaurantId) {
+        restaurantService.activate(restaurantId);
     }
 
     @CheckSecurity.Restaurant.Edit
-    @DeleteMapping("/{id}/active")
+    @DeleteMapping("/{restaurantId}/active")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inactivate(@PathVariable Long id) {
-        restaurantService.inactivate(id);
+    public void inactivate(@PathVariable Long restaurantId) {
+        restaurantService.inactivate(restaurantId);
     }
 
     @CheckSecurity.Restaurant.Edit
@@ -121,25 +121,25 @@ public class RestaurantController {
     }
 
     @CheckSecurity.Restaurant.Edit
-    @PutMapping("/{id}/open")
+    @PutMapping("/{restaurantId}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void opening(@PathVariable Long id) {
-        restaurantService.opening(id);
+    public void opening(@PathVariable Long restaurantId) {
+        restaurantService.opening(restaurantId);
     }
 
     @CheckSecurity.Restaurant.Edit
-    @DeleteMapping("/{id}/open")
+    @DeleteMapping("/{restaurantId}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void closing(@PathVariable Long id) {
-        restaurantService.closing(id);
+    public void closing(@PathVariable Long restaurantId) {
+        restaurantService.closing(restaurantId);
     }
 
     @CheckSecurity.Restaurant.Edit
-    @PutMapping("/{id}/update-address")
-    public ResponseEntity<RestaurantModel> updateAddress(@PathVariable Long id,
+    @PutMapping("/{restaurantId}/update-address")
+    public ResponseEntity<RestaurantModel> updateAddress(@PathVariable Long restaurantId,
                                                          @Valid @RequestBody AddressInput addressInput) {
         try {
-            Restaurant restaurant = restaurantService.updateAddress(id, addressMapper.toAddress(addressInput));
+            Restaurant restaurant = restaurantService.updateAddress(restaurantId, addressMapper.toAddress(addressInput));
             return ResponseEntity.ok(restaurantMapper.toRestaurantModel(restaurant));
         } catch (CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
@@ -147,9 +147,9 @@ public class RestaurantController {
     }
 
     @CheckSecurity.Restaurant.Edit
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) {
-        restaurantService.deleteById(id);
+    public void deleteById(@PathVariable Long restaurantId) {
+        restaurantService.deleteById(restaurantId);
     }
 }

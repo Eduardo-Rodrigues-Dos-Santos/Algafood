@@ -26,7 +26,8 @@ public @interface CheckSecurity {
 
     @interface Restaurant {
 
-        @PreAuthorize("hasAuthority('EDIT_RESTAURANT') and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDIT_RESTAURANT') or " +
+                "@securityUtils.existsResponsible(#restaurantId))")
         @Target(ElementType.METHOD)
         @Retention(RetentionPolicy.RUNTIME)
         @interface Edit {
