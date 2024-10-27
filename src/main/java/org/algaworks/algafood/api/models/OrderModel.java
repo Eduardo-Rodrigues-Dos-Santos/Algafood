@@ -13,7 +13,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class OrderModel {
 
-    private Long id;
+    private String code;
     private UserModel client;
     private String restaurantName;
     private List<OrderItemModel> items;

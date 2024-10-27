@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-
+    private String code;
     @ManyToOne
     @JoinColumn(name = "client_user_id")
     private User client;
@@ -93,5 +94,10 @@ public class Order {
     public void cancel() {
         setOrderStatus(OrderStatus.CANCELED);
         this.cancellationDate = OffsetDateTime.now();
+    }
+
+    @PrePersist
+    public void prePersiste() {
+        this.code = UUID.randomUUID().toString();
     }
 }

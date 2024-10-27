@@ -14,8 +14,8 @@ public interface OrderRepository extends CustomJpaRepository<Order, Long> {
 
     @Query("select o from Order o left join fetch o.deliveryAddress.city c left join fetch c.state " +
             "left join fetch o.paymentMethod left join fetch o.client left join fetch o.restaurant r " +
-            "left join fetch r.kitchen left join fetch o.items i left join fetch i.product where o.id = :id")
-    Optional<Order> findById(@Param("id") Long id);
+            "left join fetch r.kitchen left join fetch o.items i left join fetch i.product where o.code = :code")
+    Optional<Order> findByCode(@Param("code") String code);
 
     @Query("select o from Order o left join fetch o.client left join fetch o.restaurant r left join fetch r.kitchen " +
             "left join fetch o.paymentMethod")

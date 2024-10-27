@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 @Setter
 public class OrderSimpleModel {
 
-    private Long id;
+    private String code;
     private UserModel client;
     private String restaurantName;
     private PaymentMethodModel paymentMethod;

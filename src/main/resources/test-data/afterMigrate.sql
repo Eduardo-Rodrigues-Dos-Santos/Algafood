@@ -141,8 +141,8 @@ insert into tb_restaurant_payment_method(restaurant_id, payment_method_id) value
 insert into tb_restaurant_payment_method(restaurant_id, payment_method_id) values (5, 2);
 insert into tb_restaurant_payment_method(restaurant_id, payment_method_id) values (6, 3);
 
-insert into tb_order(client_user_id, restaurant_id, payment_method_id, order_status, address_city_id, address_postal_code, address_number, address_complement, address_district, subtotal, delivery_fee, total_value, creation_date, confirmation_date, cancellation_date, delivery_date)
-values (1, 1, 2, "CREATED", 1, "875462", "33", "proxímo ao supermerdado lider", "centro", 140.00, 20.00, 160.00, utc_timestamp, null, null, null);
+insert into tb_order(id, code, client_user_id, restaurant_id, payment_method_id, order_status, address_city_id, address_postal_code, address_number, address_complement, address_district, subtotal, delivery_fee, total_value, creation_date, confirmation_date, cancellation_date, delivery_date)
+values (1, "f8093e78-729c-42bc-8679-999ce449c45a", 1, 1, 2, "CREATED", 1, "875462", "33", "proxímo ao supermerdado lider", "centro", 140.00, 20.00, 160.00, utc_timestamp, null, null, null);
 
 insert into tb_order_item(product_id, order_id, quantity, unit_value, total_value, observation)
 values (2, 1, 2, 25.00, 50.00, "saindo para a entrega");

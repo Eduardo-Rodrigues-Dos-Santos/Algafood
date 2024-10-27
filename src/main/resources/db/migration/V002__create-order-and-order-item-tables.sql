@@ -1,5 +1,6 @@
 create table tb_order (
     id bigint not null auto_increment,
+    code varchar(40) not null unique,
     client_user_id bigint not null,
     restaurant_id bigint not null,
     payment_method_id bigint not null,
