@@ -46,6 +46,7 @@ create table tb_payment_method (
 
 create table tb_restaurant (
     id bigint not null auto_increment,
+    code varchar(40) not null unique,
     name varchar(40),
     kitchen_id bigint not null,
     is_active boolean default false,

@@ -20,15 +20,21 @@ import java.util.Set;
 @AllArgsConstructor
 public class RestaurantService {
 
-    private static final String MSG_RESTAURANT_IN_USE = "Restaurant %d cannot be removed as it is in use.";
+    private static final String MSG_RESTAURANT_IN_USE = "Restaurant %s cannot be removed as it is in use.";
     private final RestaurantRepository restaurantRepository;
     private final KitchenService kitchenService;
     private final CityService cityService;
     private final PaymentMethodService paymentMethodService;
     private final UserService userService;
 
-    public Restaurant findById(Long id) {
-        return restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
+
+    public Restaurant findByCode(String code) {
+        return restaurantRepository.findByCode(code).orElseThrow(() -> new RestaurantNotFoundException(code));
+    }
+
+    public Restaurant findByCodeForValidation(String code) {
+        return restaurantRepository.findRestaurantByCodeForValidation(code)
+                .orElseThrow(() -> new RestaurantNotFoundException(code));
     }
 
     public Page<Restaurant> findAll(Pageable pageable) {
@@ -44,11 +50,12 @@ public class RestaurantService {
     }
 
     @Transactional
-    public Set<PaymentMethod> findAllPaymentMethods(Long restaurantId) {
-        Restaurant restaurant = this.findById(restaurantId);
+    public Set<PaymentMethod> findAllPaymentMethods(String restaurantCode) {
+        Restaurant restaurant = this.findByCode(restaurantCode);
         Hibernate.initialize(restaurant.getPaymentMethods());
         return restaurant.getPaymentMethods();
     }
+
 
     @Transactional
     public Restaurant add(Restaurant restaurant) {
@@ -60,89 +67,89 @@ public class RestaurantService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteByCode(String code) {
         try {
-            this.findById(id);
-            restaurantRepository.deleteById(id);
+            Restaurant restaurant = this.findByCode(code);
+            restaurantRepository.deleteById(restaurant.getId());
             restaurantRepository.flush();
         } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(String.format(MSG_RESTAURANT_IN_USE, id));
+            throw new EntityInUseException(String.format(MSG_RESTAURANT_IN_USE, code));
         }
     }
 
     @Transactional
-    public void attachPaymentMethod(Long restaurantId, Long paymentMethodId) {
+    public void attachPaymentMethod(String restaurantCode, Long paymentMethodId) {
         PaymentMethod paymentMethod = paymentMethodService.findById(paymentMethodId);
-        Restaurant restaurant = this.findById(restaurantId);
+        Restaurant restaurant = this.findByCode(restaurantCode);
         restaurant.addPaymentMethod(paymentMethod);
     }
 
     @Transactional
-    public void detachPaymentMethod(Long restaurantId, Long paymentMethodId) {
+    public void detachPaymentMethod(String restaurantCode, Long paymentMethodId) {
         PaymentMethod paymentMethod = paymentMethodService.findById(paymentMethodId);
-        Restaurant restaurant = this.findById(restaurantId);
+        Restaurant restaurant = this.findByCode(restaurantCode);
         restaurant.removePaymentMethod(paymentMethod);
     }
 
     @Transactional
-    public Set<User> findAllResponsible(Long restaurantId) {
-        Restaurant restaurant = this.findById(restaurantId);
+    public Set<User> findAllResponsible(String restaurantCode) {
+        Restaurant restaurant = this.findByCode(restaurantCode);
         Hibernate.initialize(restaurant.getResponsible());
         return restaurant.getResponsible();
     }
 
     @Transactional
-    public void addResponsible(Long restaurantId, Long restaurants) {
-        Restaurant restaurant = this.findById(restaurantId);
+    public void addResponsible(String restaurantCode, Long restaurants) {
+        Restaurant restaurant = this.findByCode(restaurantCode);
         User responsible = userService.findById(restaurants);
         restaurant.addResponsible(responsible);
     }
 
     @Transactional
-    public void removeResponsible(Long restaurantId, Long restaurants) {
-        Restaurant restaurant = this.findById(restaurantId);
+    public void removeResponsible(String restaurantCode, Long restaurants) {
+        Restaurant restaurant = this.findByCode(restaurantCode);
         User responsible = userService.findById(restaurants);
         restaurant.removeResponsible(responsible);
     }
 
     @Transactional
-    public void activate(Long id) {
-        Restaurant restaurant = findById(id);
+    public void activate(String code) {
+        Restaurant restaurant = findByCode(code);
         restaurant.activate();
     }
 
     @Transactional
-    public void inactivate(Long id) {
-        Restaurant restaurant = findById(id);
+    public void inactivate(String code) {
+        Restaurant restaurant = findByCode(code);
         restaurant.inactivate();
     }
 
     @Transactional
-    public void activateMultiples(List<Long> restaurantsIds) {
-        restaurantsIds.forEach(this::activate);
+    public void activateMultiples(List<String> restaurantCodes) {
+        restaurantCodes.forEach(this::activate);
     }
 
     @Transactional
-    public void inactivateMultiples(List<Long> restaurantsIds) {
-        restaurantsIds.forEach(this::inactivate);
+    public void inactivateMultiples(List<String> restaurantCodes) {
+        restaurantCodes.forEach(this::inactivate);
     }
 
     @Transactional
-    public void opening(Long id) {
-        Restaurant restaurant = findById(id);
+    public void opening(String code) {
+        Restaurant restaurant = findByCode(code);
         restaurant.opening();
     }
 
     @Transactional
-    public void closing(Long id) {
-        Restaurant restaurant = findById(id);
+    public void closing(String code) {
+        Restaurant restaurant = findByCode(code);
         restaurant.closing();
     }
 
     @Transactional()
-    public Restaurant updateAddress(Long id, Address address) {
+    public Restaurant updateAddress(String code, Address address) {
         City city = cityService.findById(address.getCity().getId());
-        Restaurant restaurant = findById(id);
+        Restaurant restaurant = findByCode(code);
         restaurant.setAddress(address);
         restaurant.getAddress().setCity(city);
         return restaurantRepository.saveAndFlush(restaurant);

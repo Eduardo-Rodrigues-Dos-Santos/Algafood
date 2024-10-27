@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class OrderService {
 
-    private static final String MSG_PRODUCT_NOT_FOUND = "There is no product with id %d registered in the restaurant with id %d";
+    private static final String MSG_PRODUCT_NOT_FOUND = "There is no product with id %d registered in the restaurant with code %s";
     private static final String PAYMENT_METHOD_NOT_ACCEPTED = "Credit card payment method is not accepted by this restaurant.";
 
     private final SecurityUtils securityUtils;
@@ -47,7 +47,7 @@ public class OrderService {
 
 
     private Order validateOrder(Order order) {
-        Restaurant restaurant = restaurantService.findById(order.getRestaurant().getId());
+        Restaurant restaurant = restaurantService.findByCodeForValidation(order.getRestaurant().getCode());
         PaymentMethod paymentMethod = paymentMethodService.findById(order.getPaymentMethod().getId());
         City city = cityService.findById(order.getDeliveryAddress().getCity().getId());
 
@@ -57,7 +57,7 @@ public class OrderService {
             orderItem.setProduct(product);
             orderItem.setOrder(order);
         });
-        validatePaymentMethod(restaurant.getId(), paymentMethod.getId());
+        validatePaymentMethod(restaurant, paymentMethod);
 
         Long userId = securityUtils.getUserId();
         order.setClient(userService.findById(userId));
@@ -67,10 +67,9 @@ public class OrderService {
         return order;
     }
 
-    private void validatePaymentMethod(Long restaurantId, Long paymentMethodId) {
-        Set<PaymentMethod> allPaymentMethods = restaurantService.findAllPaymentMethods(restaurantId);
-        PaymentMethod paymentMethod = paymentMethodService.findById(paymentMethodId);
+    private void validatePaymentMethod(Restaurant restaurant, PaymentMethod paymentMethod) {
 
+        Set<PaymentMethod> allPaymentMethods = restaurant.getPaymentMethods();
         if (!allPaymentMethods.contains(paymentMethod)) {
             throw new BusinessException(PAYMENT_METHOD_NOT_ACCEPTED);
         }
@@ -82,7 +81,7 @@ public class OrderService {
             if (product.getRestaurant().equals(restaurant)) {
                 return product;
             }
-            throw new BusinessException(String.format(MSG_PRODUCT_NOT_FOUND, restaurant.getId(), productId));
+            throw new BusinessException(String.format(MSG_PRODUCT_NOT_FOUND, productId, restaurant.getCode()));
         } catch (ProductNotFoundException e) {
             throw new BusinessException(String.format(MSG_PRODUCT_NOT_FOUND, restaurant.getId(), productId));
         }

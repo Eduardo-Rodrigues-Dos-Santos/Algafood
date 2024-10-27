@@ -22,22 +22,22 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public Product findByRestaurant(Long restaurantId, Long productId) {
-        restaurantService.findById(restaurantId);
-        return productRepository.findByRestaurant(restaurantId, productId)
+    public Product findByRestaurant(String restaurantCode, Long productId) {
+        restaurantService.findByCode(restaurantCode);
+        return productRepository.findByRestaurant(restaurantCode, productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
     @Transactional
-    public Set<Product> findAll(Long restaurantId) {
-        Restaurant restaurant = restaurantService.findById(restaurantId);
+    public Set<Product> findAll(String restaurantCode) {
+        Restaurant restaurant = restaurantService.findByCode(restaurantCode);
         Hibernate.initialize(restaurant.getProducts());
         return restaurant.getProducts();
     }
 
     @Transactional
-    public Product add(Long restaurantId, Product product) {
-        Restaurant restaurant = restaurantService.findById(restaurantId);
+    public Product add(String restaurantCode, Product product) {
+        Restaurant restaurant = restaurantService.findByCode(restaurantCode);
         product.setRestaurant(restaurant);
         return productRepository.saveAndFlush(product);
     }

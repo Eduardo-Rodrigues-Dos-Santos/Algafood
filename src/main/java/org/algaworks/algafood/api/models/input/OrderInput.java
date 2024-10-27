@@ -1,6 +1,7 @@
 package org.algaworks.algafood.api.models.input;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -12,9 +13,8 @@ import java.util.List;
 @Setter
 public class OrderInput {
 
-    @NotNull
-    @Positive
-    private Long restaurantId;
+    @NotEmpty
+    private String restaurantCode;
 
     @NotNull
     @Positive

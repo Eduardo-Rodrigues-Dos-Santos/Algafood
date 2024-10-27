@@ -11,7 +11,7 @@ spring:
   flyway:
     locations:
       - classpath:db/migration
-#      - classpath:test-data
+      - classpath:test-data
 
   jpa:
     open-in-view: false

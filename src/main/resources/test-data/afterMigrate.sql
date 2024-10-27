@@ -70,23 +70,23 @@ insert into tb_payment_method(description) values ("pix");
 insert into tb_payment_method(description) values ("debit card");
 insert into tb_payment_method(description) values ("credit card");
 
-insert into tb_restaurant(name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
-values ("Madeiro", 1, true, true, 2, "Centro", 12, 65052410, "próximo a algum lugar", 20.00, utc_timestamp, utc_timestamp);
+insert into tb_restaurant(code, name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
+values ("11b899b4-669d-42db-9c0e-b4d2763f6702", "Madeiro", 1, true, true, 2, "Centro", 12, 65052410, "próximo a algum lugar", 20.00, utc_timestamp, utc_timestamp);
 
-insert into tb_restaurant(name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
-values ("Pobre Juan", 2, true, true, 4, "Zona Sul", 45, 70012308, "próximo a algum lugar", 15.00, utc_timestamp, utc_timestamp);
+insert into tb_restaurant(code, name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
+values ("47c88854-4800-4ac6-8a31-171776903143", "Pobre Juan", 2, true, true, 4, "Zona Sul", 45, 70012308, "próximo a algum lugar", 15.00, utc_timestamp, utc_timestamp);
 
-insert into tb_restaurant(name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
-values ("Tradição Mexícana", 4, true, true, 3, "Zona Norte", 13, 43329899, "próximo a algum lugar", 32.00, utc_timestamp, utc_timestamp);
+insert into tb_restaurant(code, name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
+values ("e03c66a1-bb95-45ff-ba7c-14ccc649e62b", "Tradição Mexícana", 4, true, true, 3, "Zona Norte", 13, 43329899, "próximo a algum lugar", 32.00, utc_timestamp, utc_timestamp);
 
-insert into tb_restaurant(name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
-values ("Tradição Japonesa", 3, true, true, 1, "Centro", 85, 15342455, "próximo a algum lugar", 16.00, utc_timestamp, utc_timestamp);
+insert into tb_restaurant(code, name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
+values ("88b4b4a2-5706-4ee0-a542-039515c37d3a", "Tradição Japonesa", 3, true, true, 1, "Centro", 85, 15342455, "próximo a algum lugar", 16.00, utc_timestamp, utc_timestamp);
 
-insert into tb_restaurant(name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
-values ("Tradição Turca", 5, true, true, 6, "Centro", 55, 3554665, "próximo a algum lugar", 00.00, utc_timestamp, utc_timestamp);
+insert into tb_restaurant(code, name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
+values ("6f9cfd9e-d108-4639-838b-2200f9f05933", "Tradição Turca", 5, true, true, 6, "Centro", 55, 3554665, "próximo a algum lugar", 00.00, utc_timestamp, utc_timestamp);
 
-insert into tb_restaurant(name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
-values ("Tradição Espanhola", 6, true, true, 5, "Centro", 15, 6622241, "próximo a algum lugar", 00.00, utc_timestamp, utc_timestamp);
+insert into tb_restaurant(code, name, kitchen_id, is_active, is_open, address_city_id, address_district, address_number, address_postal_code, address_complement, fee, registration_date, update_date)
+values ("4d8434fd-1837-40ee-a3b1-a296d0d57582", "Tradição Espanhola", 6, true, true, 5, "Centro", 15, 6622241, "próximo a algum lugar", 00.00, utc_timestamp, utc_timestamp);
 
 insert into tb_product(name, description, active, restaurant_id, value) values ("Arroz de Forno", "Feito com arroz cozido, queijo, presunto, tomate, ervilha e milho, é misturado e levado ao forno para gratinar. ", true, 5, 45.00);
 insert into tb_product(name, description, active, restaurant_id, value) values ("Bolo de Carne Vegano", "Feito com proteína de soja, farinha de trigo, cebola, alho e óleo, é assado no forno até ficar dourado e crocante por fora. ", true, 1, 25.00);

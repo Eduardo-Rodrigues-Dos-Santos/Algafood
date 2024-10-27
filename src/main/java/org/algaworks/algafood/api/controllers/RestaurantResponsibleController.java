@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/restaurants/{restaurantId}/responsible")
+@RequestMapping("/restaurants/{restaurantCode}/responsible")
 @AllArgsConstructor
 public class RestaurantResponsibleController {
 
@@ -22,8 +22,8 @@ public class RestaurantResponsibleController {
 
     @CheckSecurity.Restaurant.Consult
     @GetMapping
-    public ResponseEntity<Set<UserModel>> findAllResponsible(@PathVariable Long restaurantId) {
-        Set<UserModel> responsible = restaurantService.findAllResponsible(restaurantId).stream()
+    public ResponseEntity<Set<UserModel>> findAllResponsible(@PathVariable String restaurantCode) {
+        Set<UserModel> responsible = restaurantService.findAllResponsible(restaurantCode).stream()
                 .map(userMapper::toUserModel).collect(Collectors.toSet());
         return ResponseEntity.ok(responsible);
     }
@@ -31,14 +31,14 @@ public class RestaurantResponsibleController {
     @CheckSecurity.Restaurant.Edit
     @PutMapping("/{responsibleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addResponsible(@PathVariable Long restaurantId, @PathVariable Long responsibleId) {
-        restaurantService.addResponsible(restaurantId, responsibleId);
+    public void addResponsible(@PathVariable String restaurantCode, @PathVariable Long responsibleId) {
+        restaurantService.addResponsible(restaurantCode, responsibleId);
     }
 
     @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/{responsibleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeResponsible(@PathVariable Long restaurantId, @PathVariable Long responsibleId) {
-        restaurantService.removeResponsible(restaurantId, responsibleId);
+    public void removeResponsible(@PathVariable String restaurantCode, @PathVariable Long responsibleId) {
+        restaurantService.removeResponsible(restaurantCode, responsibleId);
     }
 }

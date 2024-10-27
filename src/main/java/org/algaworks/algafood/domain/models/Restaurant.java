@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -28,6 +29,7 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+    private String code;
     private String name;
     private BigDecimal fee = BigDecimal.ZERO;
 
@@ -58,7 +60,7 @@ public class Restaurant {
             inverseJoinColumns = @JoinColumn(name = "responsible_id"))
     private Set<User> responsible = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "tb_restaurant_payment_method",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
@@ -97,5 +99,10 @@ public class Restaurant {
 
     public void removeResponsible(User responsible) {
         this.responsible.remove(responsible);
+    }
+
+    @PrePersist
+    private void prePersiste() {
+        this.code = UUID.randomUUID().toString();
     }
 }

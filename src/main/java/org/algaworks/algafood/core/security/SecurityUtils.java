@@ -23,7 +23,7 @@ public class SecurityUtils {
         return jwt.getClaim("user_id");
     }
 
-    public boolean existsResponsible(Long restaurantId) {
-        return restaurantRepository.existsResponsible(restaurantId, getUserId());
+    public boolean existsResponsible(String restaurantCode) {
+        return restaurantRepository.existsResponsible(restaurantCode, getUserId());
     }
 }

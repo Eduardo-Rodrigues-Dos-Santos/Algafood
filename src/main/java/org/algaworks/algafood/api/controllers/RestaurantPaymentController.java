@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/restaurants/{restaurantId}/payment-methods")
+@RequestMapping("/restaurants/{restaurantCode}/payment-methods")
 @AllArgsConstructor
 public class RestaurantPaymentController {
 
@@ -23,8 +23,8 @@ public class RestaurantPaymentController {
 
     @CheckSecurity.Restaurant.Consult
     @GetMapping
-    public ResponseEntity<Set<PaymentMethodModel>> findAllPaymentsMethods(@PathVariable Long restaurantId) {
-        Set<PaymentMethod> allPaymentMethods = restaurantService.findAllPaymentMethods(restaurantId);
+    public ResponseEntity<Set<PaymentMethodModel>> findAllPaymentsMethods(@PathVariable String restaurantCode) {
+        Set<PaymentMethod> allPaymentMethods = restaurantService.findAllPaymentMethods(restaurantCode);
         return ResponseEntity.ok(allPaymentMethods.stream().map(paymentMethodMapper::toPaymentModel)
                 .collect(Collectors.toSet()));
     }
@@ -32,14 +32,14 @@ public class RestaurantPaymentController {
     @CheckSecurity.Restaurant.Edit
     @PutMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void attachPaymentMethod(@PathVariable Long restaurantId, @PathVariable Long paymentMethodId) {
-        restaurantService.attachPaymentMethod(restaurantId, paymentMethodId);
+    public void attachPaymentMethod(@PathVariable String restaurantCode, @PathVariable Long paymentMethodId) {
+        restaurantService.attachPaymentMethod(restaurantCode, paymentMethodId);
     }
 
     @CheckSecurity.Restaurant.Edit
     @DeleteMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void detachPaymentMethod(@PathVariable Long restaurantId, @PathVariable Long paymentMethodId) {
-        restaurantService.detachPaymentMethod(restaurantId, paymentMethodId);
+    public void detachPaymentMethod(@PathVariable String restaurantCode, @PathVariable Long paymentMethodId) {
+        restaurantService.detachPaymentMethod(restaurantCode, paymentMethodId);
     }
 }

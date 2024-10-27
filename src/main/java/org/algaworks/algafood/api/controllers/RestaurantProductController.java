@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/restaurants/{restaurantId}/products")
+@RequestMapping("/restaurants/{restaurantCode}/products")
 @AllArgsConstructor
 public class RestaurantProductController {
 
@@ -25,31 +25,31 @@ public class RestaurantProductController {
 
     @CheckSecurity.Restaurant.Consult
     @GetMapping
-    public ResponseEntity<Set<ProductModel>> findAllProducts(@PathVariable Long restaurantId) {
-        Set<Product> products = productService.findAll(restaurantId);
+    public ResponseEntity<Set<ProductModel>> findAllProducts(@PathVariable String restaurantCode) {
+        Set<Product> products = productService.findAll(restaurantCode);
         return ResponseEntity.ok(products.stream().map(productMapper::toProductModel).collect(Collectors.toSet()));
     }
 
     @CheckSecurity.Restaurant.Consult
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductModel> findByRestaurant(@PathVariable Long restaurantId, @PathVariable Long productId) {
-        return ResponseEntity.ok(productMapper.toProductModel(productService.findByRestaurant(restaurantId, productId)));
+    public ResponseEntity<ProductModel> findByRestaurant(@PathVariable String restaurantCode, @PathVariable Long productId) {
+        return ResponseEntity.ok(productMapper.toProductModel(productService.findByRestaurant(restaurantCode, productId)));
     }
 
     @CheckSecurity.Restaurant.Edit
     @PostMapping
-    public ResponseEntity<ProductModel> add(@PathVariable Long restaurantId, @RequestBody @Valid ProductInput productInput) {
+    public ResponseEntity<ProductModel> add(@PathVariable String restaurantCode, @RequestBody @Valid ProductInput productInput) {
         Product product = productMapper.toProduct(productInput);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productMapper.toProductModel(productService.add(restaurantId, product)));
+                .body(productMapper.toProductModel(productService.add(restaurantCode, product)));
     }
 
     @CheckSecurity.Restaurant.Edit
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductModel> update(@PathVariable Long restaurantId, @PathVariable Long productId,
+    public ResponseEntity<ProductModel> update(@PathVariable String restaurantCode, @PathVariable Long productId,
                                                @RequestBody @Valid ProductInput productInput) {
-        Product currentProduct = productService.findByRestaurant(restaurantId, productId);
+        Product currentProduct = productService.findByRestaurant(restaurantCode, productId);
         productMapper.copyToDomainObject(productInput, currentProduct);
-        return ResponseEntity.ok(productMapper.toProductModel(productService.add(restaurantId, currentProduct)));
+        return ResponseEntity.ok(productMapper.toProductModel(productService.add(restaurantCode, currentProduct)));
     }
 }
