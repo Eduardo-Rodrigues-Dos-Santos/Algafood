@@ -1,6 +1,7 @@
 package org.algaworks.algafood.api.mapper;
 
 import lombok.AllArgsConstructor;
+import org.algaworks.algafood.api.models.RestaurantCodeAndName;
 import org.algaworks.algafood.api.models.RestaurantSimpleModel;
 import org.algaworks.algafood.api.models.RestaurantModel;
 import org.algaworks.algafood.api.models.input.RestaurantInput;
@@ -31,4 +32,7 @@ public class RestaurantMapper {
         return modelMapper.map(restaurant, RestaurantModel.class, TypeMapName.TO_RESTAURANT_MODEL.getValue());
     }
 
+    public RestaurantCodeAndName toRestaurantCodeAndName(Restaurant restaurant) {
+        return modelMapper.map(restaurant, RestaurantCodeAndName.class);
+    }
 }

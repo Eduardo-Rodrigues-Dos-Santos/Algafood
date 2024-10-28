@@ -29,14 +29,14 @@ public class RestaurantPaymentController {
                 .collect(Collectors.toSet()));
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void attachPaymentMethod(@PathVariable String restaurantCode, @PathVariable Long paymentMethodId) {
         restaurantService.attachPaymentMethod(restaurantCode, paymentMethodId);
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @DeleteMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void detachPaymentMethod(@PathVariable String restaurantCode, @PathVariable Long paymentMethodId) {

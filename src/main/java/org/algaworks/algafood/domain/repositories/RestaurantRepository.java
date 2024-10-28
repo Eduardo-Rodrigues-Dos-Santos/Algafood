@@ -34,5 +34,5 @@ public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Lo
 
     @Query("select case when exists(select 1 from Restaurant r join r.responsible responsible " +
             "where r.code = :restaurantCode and responsible.id = :responsibleId) then true else false end")
-    Boolean existsResponsible(@Param("restaurantCode") String restaurantCode, @Param("responsibleId") Long responsibleId);
+    Boolean isResponsible(@Param("restaurantCode") String restaurantCode, @Param("responsibleId") Long responsibleId);
 }

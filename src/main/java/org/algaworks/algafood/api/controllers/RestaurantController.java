@@ -61,7 +61,7 @@ public class RestaurantController {
                 .map(restaurantMapper::toRestaurantSimpleModel));
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PostMapping
     public ResponseEntity<RestaurantSimpleModel> add(@RequestBody @Valid RestaurantInput restaurantInput) {
         try {
@@ -72,7 +72,7 @@ public class RestaurantController {
         }
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/{restaurantCode}")
     public ResponseEntity<RestaurantSimpleModel> update(@PathVariable String restaurantCode,
                                                         @Valid @RequestBody RestaurantInput restaurantInput) {
@@ -85,21 +85,21 @@ public class RestaurantController {
         }
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/{restaurantCode}/active")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activate(@PathVariable String restaurantCode) {
         restaurantService.activate(restaurantCode);
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @DeleteMapping("/{restaurantCode}/active")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inactivate(@PathVariable String restaurantCode) {
         restaurantService.inactivate(restaurantCode);
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/active-multiples")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activateMultiples(@RequestBody List<String> restaurantCodes) {
@@ -110,7 +110,7 @@ public class RestaurantController {
         }
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @DeleteMapping("/active-multiples")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inactivateMultiples(@RequestBody List<String> restaurantCodes) {
@@ -121,21 +121,21 @@ public class RestaurantController {
         }
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/{restaurantCode}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void opening(@PathVariable String restaurantCode) {
         restaurantService.opening(restaurantCode);
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @DeleteMapping("/{restaurantCode}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closing(@PathVariable String restaurantCode) {
         restaurantService.closing(restaurantCode);
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/{restaurantCode}/update-address")
     public ResponseEntity<RestaurantModel> updateAddress(@PathVariable String restaurantCode,
                                                          @Valid @RequestBody AddressInput addressInput) {
@@ -147,7 +147,7 @@ public class RestaurantController {
         }
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @DeleteMapping("/{restaurantCode}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteByCode(@PathVariable String restaurantCode) {

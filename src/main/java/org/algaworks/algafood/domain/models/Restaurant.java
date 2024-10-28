@@ -60,7 +60,7 @@ public class Restaurant {
             inverseJoinColumns = @JoinColumn(name = "responsible_id"))
     private Set<User> responsible = new HashSet<>();
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(name = "tb_restaurant_payment_method",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))

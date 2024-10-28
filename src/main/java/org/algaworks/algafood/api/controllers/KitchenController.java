@@ -35,14 +35,14 @@ public class KitchenController {
         return ResponseEntity.ok(kitchenService.findAll(pageable).map(kitchenMapper::toKitchenModel));
     }
 
-    @CheckSecurity.Kitchen.Edit
+    @CheckSecurity.Kitchen.Manage
     @PostMapping
     public ResponseEntity<KitchenModel> add(@RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen kitchen = kitchenService.add(kitchenMapper.toKitchen(kitchenInput));
         return ResponseEntity.status(HttpStatus.CREATED).body(kitchenMapper.toKitchenModel(kitchen));
     }
 
-    @CheckSecurity.Kitchen.Edit
+    @CheckSecurity.Kitchen.Manage
     @PutMapping("/{id}")
     public ResponseEntity<KitchenModel> update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen kitchen = kitchenService.findById(id);
@@ -50,7 +50,7 @@ public class KitchenController {
         return ResponseEntity.ok(kitchenMapper.toKitchenModel(kitchenService.add(kitchen)));
     }
 
-    @CheckSecurity.Kitchen.Edit
+    @CheckSecurity.Kitchen.Manage
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {

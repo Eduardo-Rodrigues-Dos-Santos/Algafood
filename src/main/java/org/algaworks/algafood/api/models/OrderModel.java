@@ -15,7 +15,7 @@ public class OrderModel {
 
     private String code;
     private UserModel client;
-    private String restaurantName;
+    private RestaurantCodeAndName restaurant;
     private List<OrderItemModel> items;
     private PaymentMethodModel paymentMethod;
     private String orderStatus;

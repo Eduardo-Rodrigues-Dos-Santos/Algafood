@@ -7,6 +7,7 @@ import org.algaworks.algafood.domain.exceptions.OrderNotFoundException;
 import org.algaworks.algafood.domain.exceptions.ProductNotFoundException;
 import org.algaworks.algafood.domain.models.*;
 import org.algaworks.algafood.domain.repositories.OrderRepository;
+import org.algaworks.algafood.infrastructure.repository.specifications.OrderSpecsFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,14 @@ public class OrderService {
     private final RestaurantService restaurantService;
     private final UserService userService;
 
-    public Page<Order> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+
+    public Page<Order> findAllByRestaurant(String restaurantCode, Pageable pageable) {
+        Restaurant restaurant = restaurantService.findByCode(restaurantCode);
+        return orderRepository.findAll(OrderSpecsFactory.ordersByRestaurant(restaurant.getId()), pageable);
+    }
+
+    public Page<Order> findAllByClient(Long clientId, Pageable pageable) {
+        return orderRepository.findAll(OrderSpecsFactory.ordersByClient(clientId), pageable);
     }
 
     public Order findByCode(String code) {
@@ -44,7 +51,6 @@ public class OrderService {
         calculateOrderValue(validatedOrder);
         return orderRepository.save(validatedOrder);
     }
-
 
     private Order validateOrder(Order order) {
         Restaurant restaurant = restaurantService.findByCodeForValidation(order.getRestaurant().getCode());

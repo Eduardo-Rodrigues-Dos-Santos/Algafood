@@ -28,14 +28,14 @@ public class RestaurantResponsibleController {
         return ResponseEntity.ok(responsible);
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/{responsibleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addResponsible(@PathVariable String restaurantCode, @PathVariable Long responsibleId) {
         restaurantService.addResponsible(restaurantCode, responsibleId);
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @DeleteMapping("/{responsibleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeResponsible(@PathVariable String restaurantCode, @PathVariable Long responsibleId) {

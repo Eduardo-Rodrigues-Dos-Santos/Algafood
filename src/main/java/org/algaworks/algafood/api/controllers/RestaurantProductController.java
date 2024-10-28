@@ -36,7 +36,7 @@ public class RestaurantProductController {
         return ResponseEntity.ok(productMapper.toProductModel(productService.findByRestaurant(restaurantCode, productId)));
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PostMapping
     public ResponseEntity<ProductModel> add(@PathVariable String restaurantCode, @RequestBody @Valid ProductInput productInput) {
         Product product = productMapper.toProduct(productInput);
@@ -44,7 +44,7 @@ public class RestaurantProductController {
                 .body(productMapper.toProductModel(productService.add(restaurantCode, product)));
     }
 
-    @CheckSecurity.Restaurant.Edit
+    @CheckSecurity.Restaurant.Manage
     @PutMapping("/{productId}")
     public ResponseEntity<ProductModel> update(@PathVariable String restaurantCode, @PathVariable Long productId,
                                                @RequestBody @Valid ProductInput productInput) {
