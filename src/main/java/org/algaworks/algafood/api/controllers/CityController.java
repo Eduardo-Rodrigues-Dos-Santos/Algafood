@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.algaworks.algafood.api.mapper.CityMapper;
 import org.algaworks.algafood.api.models.CityModel;
 import org.algaworks.algafood.api.models.input.CityInput;
+import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.exceptions.BusinessException;
 import org.algaworks.algafood.domain.exceptions.StateNotFoundException;
 import org.algaworks.algafood.domain.models.City;
@@ -24,17 +25,20 @@ public class CityController {
     private final CityService cityService;
     private final CityMapper cityMapper;
 
+    @CheckSecurity.City.Consult
     @GetMapping("/{id}")
     public ResponseEntity<CityModel> findById(@PathVariable Long id) {
         return ResponseEntity.ok(cityMapper.toCityModel(cityService.findById(id)));
     }
 
+    @CheckSecurity.City.Consult
     @GetMapping(path = "by-state-id", params = "stateId")
     public ResponseEntity<Page<CityModel>> citiesByState(@RequestParam("stateId") Long stateId,
                                                          @PageableDefault() Pageable pageable) {
         return ResponseEntity.ok(cityService.citiesByState(stateId, pageable).map(cityMapper::toCityModel));
     }
 
+    @CheckSecurity.City.Manage
     @PostMapping
     public ResponseEntity<CityModel> add(@RequestBody @Valid CityInput cityInput) {
         try {
@@ -45,6 +49,7 @@ public class CityController {
         }
     }
 
+    @CheckSecurity.City.Manage
     @PutMapping("/{id}")
     public ResponseEntity<CityModel> update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
         try {
@@ -56,6 +61,7 @@ public class CityController {
         }
     }
 
+    @CheckSecurity.City.Manage
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {

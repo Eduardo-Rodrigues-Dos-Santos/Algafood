@@ -95,5 +95,34 @@ public @interface CheckSecurity {
         }
     }
 
+    @interface City {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDIT_CITY')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Manage {
+        }
+
+        @PreAuthorize("isAuthenticated and hasAuthority('SCOPE_READ')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Consult {
+        }
+    }
+
+    @interface State {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDIT_STATE')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Manage {
+        }
+
+        @PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Consult {
+        }
+    }
 
 }
