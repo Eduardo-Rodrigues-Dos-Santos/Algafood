@@ -1,6 +1,7 @@
 package org.algaworks.algafood.core.security;
 
 import lombok.AllArgsConstructor;
+import org.algaworks.algafood.domain.exceptions.BusinessException;
 import org.algaworks.algafood.domain.models.Order;
 import org.algaworks.algafood.domain.repositories.OrderRepository;
 import org.algaworks.algafood.domain.repositories.RestaurantRepository;
@@ -32,12 +33,16 @@ public class SecurityUtils {
 
     public boolean isResponsibleForOrder(String orderCode) {
         Order order = orderRepository.findByCode(orderCode)
-                .orElseThrow(() -> new IllegalArgumentException("Erro no código"));
+                .orElseThrow(() -> new BusinessException(String.format("There is no registered order with code %s", orderCode)));
         String restaurantCode = order.getRestaurant().getCode();
         return isResponsibleForRestaurant(restaurantCode);
     }
 
     public boolean isOwnerTheOrder(Long clientId) {
         return getUserId().equals(clientId);
+    }
+
+    public boolean isAccountOwner(Long userId) {
+        return getUserId().equals(userId);
     }
 }

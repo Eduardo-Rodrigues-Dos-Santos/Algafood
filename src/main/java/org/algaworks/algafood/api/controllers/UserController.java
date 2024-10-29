@@ -7,6 +7,7 @@ import org.algaworks.algafood.api.models.UserModel;
 import org.algaworks.algafood.api.models.input.UserInput;
 import org.algaworks.algafood.api.models.input.UserUpdateInput;
 import org.algaworks.algafood.api.models.input.UserUpdatePasswordInput;
+import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.models.User;
 import org.algaworks.algafood.domain.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -21,34 +22,40 @@ public class UserController {
     private UserService userService;
     private UserMapper userMapper;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserModel> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(userMapper.toUserModel(userService.findById(id)));
+
+    @CheckSecurity.User.Consult
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserModel> findById(@PathVariable Long userId) {
+        return ResponseEntity.ok(userMapper.toUserModel(userService.findById(userId)));
     }
 
+    @CheckSecurity.User.Create
     @PostMapping
     public ResponseEntity<UserModel> add(@Valid @RequestBody UserInput userInput) {
         User user = userService.add(userMapper.toUser(userInput));
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toUserModel(user));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserModel> update(@PathVariable Long id, @Valid @RequestBody UserUpdateInput userUpdateInput) {
-        User currentUser = userService.findById(id);
+    @CheckSecurity.User.Manage
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserModel> update(@PathVariable Long userId, @Valid @RequestBody UserUpdateInput userUpdateInput) {
+        User currentUser = userService.findById(userId);
         userMapper.copyToDomainObject(userUpdateInput, currentUser);
         User userUpdated = userService.update(currentUser);
         return ResponseEntity.ok(userMapper.toUserModel(userUpdated));
     }
 
+    @CheckSecurity.User.Manage
     @PutMapping("/{userId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassword(@PathVariable Long userId, @RequestBody @Valid UserUpdatePasswordInput updatePasswordInput) {
         userService.updatePassword(userId, updatePasswordInput.getCurrentPassword(), updatePasswordInput.getNewPassword());
     }
 
-    @DeleteMapping("/{id}")
+    @CheckSecurity.User.Manage
+    @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) {
-        userService.deleteById(id);
+    public void deleteById(@PathVariable Long userId) {
+        userService.deleteById(userId);
     }
 }

@@ -125,4 +125,38 @@ public @interface CheckSecurity {
         }
     }
 
+    @interface User {
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULT_USER') " +
+                "or @securityUtils.isAccountOwner(#userId))")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Consult {
+        }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDIT_USER') " +
+                "or @securityUtils.isAccountOwner(#userId))")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Manage {
+        }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDIT_USER')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface ManageGroup {
+        }
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('CONSULT_USER')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface ConsultGroup {
+        }
+
+        @PreAuthorize("!isAuthenticated()")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Create {
+        }
+    }
 }
