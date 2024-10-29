@@ -80,5 +80,20 @@ public @interface CheckSecurity {
         }
     }
 
+    @interface Payment {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDIT_PAYMENT_METHOD')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Manage {
+        }
+
+        @PreAuthorize("isAuthenticated and hasAuthority('SCOPE_READ')")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Consult {
+        }
+    }
+
 
 }
