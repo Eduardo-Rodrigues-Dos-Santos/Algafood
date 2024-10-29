@@ -3,6 +3,7 @@ package org.algaworks.algafood.api.controllers;
 import lombok.AllArgsConstructor;
 import org.algaworks.algafood.api.mapper.PermissionMapper;
 import org.algaworks.algafood.api.models.PermissionModel;
+import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.services.GroupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class GroupPermissionController {
     private GroupService groupService;
     private PermissionMapper permissionMapper;
 
+    @CheckSecurity.User.ConsultGroup
     @GetMapping
     public ResponseEntity<Set<PermissionModel>> findAllPermissions(@PathVariable Long groupId) {
         Set<PermissionModel> permissions = groupService.findAllPermissions(groupId).stream()
@@ -26,12 +28,14 @@ public class GroupPermissionController {
         return ResponseEntity.ok(permissions);
     }
 
+    @CheckSecurity.User.ManageGroup
     @PutMapping("/{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void attachPermission(@PathVariable Long groupId, @PathVariable Long permissionId) {
         groupService.attachPermission(groupId, permissionId);
     }
 
+    @CheckSecurity.User.ManageGroup
     @DeleteMapping("/{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void detachPermission(@PathVariable Long groupId, @PathVariable Long permissionId) {

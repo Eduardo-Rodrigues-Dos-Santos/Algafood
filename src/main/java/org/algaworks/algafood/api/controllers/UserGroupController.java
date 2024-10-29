@@ -23,7 +23,7 @@ public class UserGroupController {
 
     @CheckSecurity.User.ConsultGroup
     @GetMapping
-    public ResponseEntity<Set<GroupModel>> findAllGroups(@PathVariable Long userId) {
+    public ResponseEntity<Set<GroupModel>> findAllGroupsByUser(@PathVariable Long userId) {
         Set<GroupModel> groups = userService.findAllGroups(userId).stream().map(groupMapper::toGroupModel)
                 .collect(Collectors.toSet());
         return ResponseEntity.ok(groups);
