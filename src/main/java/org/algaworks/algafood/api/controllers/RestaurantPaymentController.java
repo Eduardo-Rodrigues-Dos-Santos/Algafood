@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.algaworks.algafood.api.mapper.PaymentMethodMapper;
 import org.algaworks.algafood.api.models.PaymentMethodModel;
 import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
+import org.algaworks.algafood.domain.exceptions.BusinessException;
+import org.algaworks.algafood.domain.exceptions.RestaurantNotFoundException;
 import org.algaworks.algafood.domain.models.PaymentMethod;
 import org.algaworks.algafood.domain.services.RestaurantService;
 import org.springframework.http.HttpStatus;
@@ -24,22 +26,34 @@ public class RestaurantPaymentController {
     @CheckSecurity.Restaurant.Consult
     @GetMapping
     public ResponseEntity<Set<PaymentMethodModel>> findAllPaymentsMethods(@PathVariable String restaurantCode) {
-        Set<PaymentMethod> allPaymentMethods = restaurantService.findAllPaymentMethods(restaurantCode);
-        return ResponseEntity.ok(allPaymentMethods.stream().map(paymentMethodMapper::toPaymentModel)
-                .collect(Collectors.toSet()));
+        try {
+            Set<PaymentMethod> allPaymentMethods = restaurantService.findAllPaymentMethods(restaurantCode);
+            return ResponseEntity.ok(allPaymentMethods.stream().map(paymentMethodMapper::toPaymentModel)
+                    .collect(Collectors.toSet()));
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @CheckSecurity.Restaurant.Manage
     @PutMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void attachPaymentMethod(@PathVariable String restaurantCode, @PathVariable Long paymentMethodId) {
-        restaurantService.attachPaymentMethod(restaurantCode, paymentMethodId);
+        try {
+            restaurantService.attachPaymentMethod(restaurantCode, paymentMethodId);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @CheckSecurity.Restaurant.Manage
     @DeleteMapping("/{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void detachPaymentMethod(@PathVariable String restaurantCode, @PathVariable Long paymentMethodId) {
-        restaurantService.detachPaymentMethod(restaurantCode, paymentMethodId);
+        try {
+            restaurantService.detachPaymentMethod(restaurantCode, paymentMethodId);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 }
