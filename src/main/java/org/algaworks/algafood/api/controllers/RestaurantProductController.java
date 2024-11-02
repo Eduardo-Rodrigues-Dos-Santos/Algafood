@@ -76,4 +76,26 @@ public class RestaurantProductController {
             throw new BusinessException(e.getMessage());
         }
     }
+
+    @CheckSecurity.Restaurant.Manage
+    @PutMapping("/{productId}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void activateProduct(@PathVariable String restaurantCode, @PathVariable Long productId) {
+        try {
+            productService.activate(restaurantCode, productId);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
+    @CheckSecurity.Restaurant.Manage
+    @DeleteMapping("/{productId}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inactivateProduct(@PathVariable String restaurantCode, @PathVariable Long productId) {
+        try {
+            productService.inactivate(restaurantCode, productId);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
 }
