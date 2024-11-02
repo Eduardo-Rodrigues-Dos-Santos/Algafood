@@ -5,11 +5,11 @@ import org.algaworks.algafood.domain.exceptions.ProductNotFoundException;
 import org.algaworks.algafood.domain.models.Product;
 import org.algaworks.algafood.domain.models.Restaurant;
 import org.algaworks.algafood.domain.repositories.ProductRepository;
-import org.hibernate.Hibernate;
+import org.algaworks.algafood.infrastructure.repository.specifications.ProductSpecsFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -28,11 +28,13 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
-    @Transactional
-    public Set<Product> findAll(String restaurantCode) {
-        Restaurant restaurant = restaurantService.findByCode(restaurantCode);
-        Hibernate.initialize(restaurant.getProducts());
-        return restaurant.getProducts();
+    public Page<Product> findAllByRestaurant(String restaurantCode, Pageable pageable) {
+        return productRepository.findAll(ProductSpecsFactory.restaurantCode(restaurantCode), pageable);
+    }
+
+    public Page<Product> findAllActiveProductsByRestaurant(String restaurantCode, Pageable pageable) {
+        restaurantService.findByCode(restaurantCode);
+        return productRepository.findAll(ProductSpecsFactory.activesByRestaurant(restaurantCode), pageable);
     }
 
     @Transactional
@@ -40,5 +42,17 @@ public class ProductService {
         Restaurant restaurant = restaurantService.findByCode(restaurantCode);
         product.setRestaurant(restaurant);
         return productRepository.saveAndFlush(product);
+    }
+
+    @Transactional
+    public void activate(String restaurantCode, Long productId) {
+        Product product = findByRestaurant(restaurantCode, productId);
+        product.setActive(true);
+    }
+
+    @Transactional
+    public void inactivate(String restaurantCode, Long productId) {
+        Product product = findByRestaurant(restaurantCode, productId);
+        product.setActive(false);
     }
 }

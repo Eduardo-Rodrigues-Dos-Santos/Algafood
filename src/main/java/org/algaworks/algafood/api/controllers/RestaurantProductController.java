@@ -6,14 +6,16 @@ import org.algaworks.algafood.api.mapper.ProductMapper;
 import org.algaworks.algafood.api.models.ProductModel;
 import org.algaworks.algafood.api.models.input.ProductInput;
 import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
+import org.algaworks.algafood.domain.exceptions.BusinessException;
+import org.algaworks.algafood.domain.exceptions.RestaurantNotFoundException;
 import org.algaworks.algafood.domain.models.Product;
 import org.algaworks.algafood.domain.services.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantCode}/products")
@@ -25,31 +27,53 @@ public class RestaurantProductController {
 
     @CheckSecurity.Restaurant.Consult
     @GetMapping
-    public ResponseEntity<Set<ProductModel>> findAllProducts(@PathVariable String restaurantCode) {
-        Set<Product> products = productService.findAll(restaurantCode);
-        return ResponseEntity.ok(products.stream().map(productMapper::toProductModel).collect(Collectors.toSet()));
+    public ResponseEntity<Page<ProductModel>> findAllProducts(@PathVariable String restaurantCode,
+                                                              @PageableDefault Pageable pageable,
+                                                              @RequestParam(required = false) boolean includeInactive) {
+        Page<Product> products;
+        try {
+            products = includeInactive ? productService.findAllByRestaurant(restaurantCode, pageable) :
+                    productService.findAllActiveProductsByRestaurant(restaurantCode, pageable);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
+        return ResponseEntity.ok(products.map(productMapper::toProductModel));
     }
 
     @CheckSecurity.Restaurant.Consult
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductModel> findByRestaurant(@PathVariable String restaurantCode, @PathVariable Long productId) {
-        return ResponseEntity.ok(productMapper.toProductModel(productService.findByRestaurant(restaurantCode, productId)));
+    public ResponseEntity<ProductModel> findById(@PathVariable String restaurantCode, @PathVariable Long productId) {
+        try {
+            Product product = productService.findByRestaurant(restaurantCode, productId);
+            ProductModel productModel = productMapper.toProductModel(product);
+            return ResponseEntity.ok(productModel);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @CheckSecurity.Restaurant.Manage
     @PostMapping
     public ResponseEntity<ProductModel> add(@PathVariable String restaurantCode, @RequestBody @Valid ProductInput productInput) {
-        Product product = productMapper.toProduct(productInput);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productMapper.toProductModel(productService.add(restaurantCode, product)));
+        try {
+            Product product = productMapper.toProduct(productInput);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(productMapper.toProductModel(productService.add(restaurantCode, product)));
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     @CheckSecurity.Restaurant.Manage
     @PutMapping("/{productId}")
     public ResponseEntity<ProductModel> update(@PathVariable String restaurantCode, @PathVariable Long productId,
                                                @RequestBody @Valid ProductInput productInput) {
-        Product currentProduct = productService.findByRestaurant(restaurantCode, productId);
-        productMapper.copyToDomainObject(productInput, currentProduct);
-        return ResponseEntity.ok(productMapper.toProductModel(productService.add(restaurantCode, currentProduct)));
+        try {
+            Product currentProduct = productService.findByRestaurant(restaurantCode, productId);
+            productMapper.copyToDomainObject(productInput, currentProduct);
+            return ResponseEntity.ok(productMapper.toProductModel(productService.add(restaurantCode, currentProduct)));
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 }
