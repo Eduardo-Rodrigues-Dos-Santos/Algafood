@@ -50,7 +50,7 @@ public @interface CheckSecurity {
         @interface ConsultByRestaurant {
         }
 
-        @PostAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULT_ORDER') " +
+        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULT_ORDER') " +
                 "or @securityUtils.isOwnerTheOrder(#clientId))")
         @Target(ElementType.METHOD)
         @Retention(RetentionPolicy.RUNTIME)

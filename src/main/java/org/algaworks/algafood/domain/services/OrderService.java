@@ -7,6 +7,7 @@ import org.algaworks.algafood.domain.exceptions.OrderNotFoundException;
 import org.algaworks.algafood.domain.exceptions.ProductNotFoundException;
 import org.algaworks.algafood.domain.models.*;
 import org.algaworks.algafood.domain.repositories.OrderRepository;
+import org.algaworks.algafood.domain.repositories.filters.OrderFilter;
 import org.algaworks.algafood.infrastructure.repository.specifications.OrderSpecsFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,9 +33,9 @@ public class OrderService {
     private final UserService userService;
 
 
-    public Page<Order> findAllByRestaurant(String restaurantCode, Pageable pageable) {
+    public Page<Order> findAllByRestaurant(String restaurantCode, OrderFilter orderFilter, Pageable pageable) {
         Restaurant restaurant = restaurantService.findByCode(restaurantCode);
-        return orderRepository.findAll(OrderSpecsFactory.ordersByRestaurant(restaurant.getId()), pageable);
+        return orderRepository.findAll(OrderSpecsFactory.ordersByRestaurant(restaurant.getId(), orderFilter), pageable);
     }
 
     public Page<Order> findAllByClient(Long clientId, Pageable pageable) {

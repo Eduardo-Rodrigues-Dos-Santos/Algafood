@@ -10,6 +10,7 @@ import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.exceptions.BusinessException;
 import org.algaworks.algafood.domain.exceptions.RestaurantNotFoundException;
 import org.algaworks.algafood.domain.models.Order;
+import org.algaworks.algafood.domain.repositories.filters.OrderFilter;
 import org.algaworks.algafood.domain.services.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,11 +46,11 @@ public class OrderController {
 
     @CheckSecurity.Order.ConsultByRestaurant
     @GetMapping("/restaurants/{restaurantCode}")
-
-    public ResponseEntity<Page<OrderSimpleModel>> findAllByRestaurant(@PathVariable String restaurantCode,
+    public ResponseEntity<Page<OrderSimpleModel>> findAllByRestaurant(OrderFilter orderFilter,
+                                                                      @PathVariable String restaurantCode,
                                                                       @PageableDefault Pageable pageable) {
         try {
-            Page<Order> orders = orderService.findAllByRestaurant(restaurantCode, pageable);
+            Page<Order> orders = orderService.findAllByRestaurant(restaurantCode, orderFilter, pageable);
             return ResponseEntity.ok(orders.map(orderMapper::toOrderSimpleModel));
         } catch (RestaurantNotFoundException e) {
             throw new BusinessException(e.getMessage());
