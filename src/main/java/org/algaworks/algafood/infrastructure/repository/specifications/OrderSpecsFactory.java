@@ -5,7 +5,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.algaworks.algafood.domain.models.Order;
-import org.algaworks.algafood.domain.repositories.filters.OrderFilter;
+import org.algaworks.algafood.domain.filters.OrderFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;

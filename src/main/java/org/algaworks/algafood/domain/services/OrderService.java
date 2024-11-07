@@ -7,7 +7,7 @@ import org.algaworks.algafood.domain.exceptions.OrderNotFoundException;
 import org.algaworks.algafood.domain.exceptions.ProductNotFoundException;
 import org.algaworks.algafood.domain.models.*;
 import org.algaworks.algafood.domain.repositories.OrderRepository;
-import org.algaworks.algafood.domain.repositories.filters.OrderFilter;
+import org.algaworks.algafood.domain.filters.OrderFilter;
 import org.algaworks.algafood.infrastructure.repository.specifications.OrderSpecsFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
