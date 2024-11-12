@@ -75,7 +75,6 @@ public class OrderService {
     }
 
     private void validatePaymentMethod(Restaurant restaurant, PaymentMethod paymentMethod) {
-
         Set<PaymentMethod> allPaymentMethods = restaurant.getPaymentMethods();
         if (!allPaymentMethods.contains(paymentMethod)) {
             throw new BusinessException(PAYMENT_METHOD_NOT_ACCEPTED);

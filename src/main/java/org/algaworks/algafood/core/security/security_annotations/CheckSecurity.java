@@ -39,6 +39,13 @@ public @interface CheckSecurity {
         @Retention(RetentionPolicy.RUNTIME)
         @interface Consult {
         }
+
+        @PreAuthorize("isAuthenticated() and (hasAuthority('CONSULT_RESTAURANT') " +
+                "or @securityUtils.isResponsibleForRestaurant(#restaurantCode))")
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface StatisticsConsult {
+        }
     }
 
     @interface Order {
