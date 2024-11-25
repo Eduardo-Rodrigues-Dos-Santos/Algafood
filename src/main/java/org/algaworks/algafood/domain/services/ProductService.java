@@ -3,13 +3,18 @@ package org.algaworks.algafood.domain.services;
 import lombok.AllArgsConstructor;
 import org.algaworks.algafood.domain.exceptions.ProductNotFoundException;
 import org.algaworks.algafood.domain.models.Product;
+import org.algaworks.algafood.domain.models.ProductPhoto;
 import org.algaworks.algafood.domain.models.Restaurant;
+import org.algaworks.algafood.domain.repositories.ProductPhotoRepository;
 import org.algaworks.algafood.domain.repositories.ProductRepository;
 import org.algaworks.algafood.infrastructure.repository.specifications.ProductSpecsFactory;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -17,6 +22,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final RestaurantService restaurantService;
+    private final ProductPhotoRepository productPhotoRepository;
 
     public Product findById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
@@ -42,6 +48,20 @@ public class ProductService {
         Restaurant restaurant = restaurantService.findByCode(restaurantCode);
         product.setRestaurant(restaurant);
         return productRepository.saveAndFlush(product);
+    }
+
+    @Transactional
+    public List<ProductPhoto> findAllPhotos(String restaurantCode, Long productId) {
+        Product product = findByRestaurant(restaurantCode, productId);
+        Hibernate.initialize(product.getProductPhoto());
+        return product.getProductPhoto();
+    }
+
+    @Transactional
+    public ProductPhoto addNewPhoto(ProductPhoto productPhoto, String restaurantCode, Long productId) {
+        Product product = findByRestaurant(restaurantCode, productId);
+        productPhoto.setProduct(product);
+        return productPhotoRepository.save(productPhoto);
     }
 
     @Transactional

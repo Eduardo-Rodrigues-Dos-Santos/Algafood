@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +26,9 @@ public class Product {
     private String description;
     private BigDecimal value;
     private Boolean active;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductPhoto> productPhoto;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
