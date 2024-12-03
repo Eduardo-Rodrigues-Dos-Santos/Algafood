@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("restaurants/{restaurantCode}/products{productId}/photos")
@@ -40,6 +39,17 @@ public class RestaurantProductPhotoController {
         }
     }
 
+    @GetMapping("/{photoId}")
+    public ResponseEntity<ProductPhotoModel> findPhotoById(@PathVariable String restaurantCode,
+                                                           @PathVariable Long productId, @PathVariable Long photoId){
+        try {
+            ProductPhoto photo = productService.findPhotoById(restaurantCode, productId, photoId);
+            return ResponseEntity.ok(productPhotoMapper.productPhotoModel(photo));
+        }catch (RestaurantNotFoundException | ProductNotFoundException e){
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<ProductPhotoModel>> findAllPhotos(@PathVariable String restaurantCode,
                                                                  @PathVariable Long productId) {
@@ -51,5 +61,4 @@ public class RestaurantProductPhotoController {
             throw new BusinessException(e.getMessage());
         }
     }
-
 }

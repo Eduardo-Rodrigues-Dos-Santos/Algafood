@@ -57,6 +57,12 @@ public class ProductService {
         return product.getProductPhoto();
     }
 
+    public ProductPhoto findPhotoById(String restaurantCode, Long productId, Long photoId){
+        findByRestaurant(restaurantCode, productId);
+        return productPhotoRepository.findPhotoByProduct(photoId, productId)
+                .orElseThrow(() -> new ProductNotFoundException(photoId));
+    }
+
     @Transactional
     public ProductPhoto addNewPhoto(ProductPhoto productPhoto, String restaurantCode, Long productId) {
         Product product = findByRestaurant(restaurantCode, productId);

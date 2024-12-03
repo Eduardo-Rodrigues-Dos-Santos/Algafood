@@ -22,7 +22,7 @@ public class ProductPhoto {
     private String contentType;
     private Long size;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 }
