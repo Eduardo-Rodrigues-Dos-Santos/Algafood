@@ -17,22 +17,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("restaurants/{restaurantCode}/products{productId}/photos")
+@RequestMapping("restaurants/{restaurantCode}/products/{productId}/photos")
 @AllArgsConstructor
 public class RestaurantProductPhotoController {
 
     private ProductService productService;
     private ProductPhotoMapper productPhotoMapper;
 
-    @PutMapping(consumes = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductPhotoModel> addNewPhoto(@PathVariable String restaurantCode,
                                                          @PathVariable Long productId,
                                                          @Valid ProductPhotoInput productPhotoInput) {
         try {
             ProductPhoto productPhoto = productPhotoMapper.toProductPhoto(productPhotoInput);
-            productPhoto.setContentType(productPhotoInput.getFile().getContentType());
-            ProductPhotoModel productPhotoModel = productPhotoMapper.productPhotoModel(
-                    productService.addNewPhoto(productPhoto, restaurantCode, productId));
+            ProductPhotoModel productPhotoModel = productPhotoMapper.productPhotoModel(productService
+                    .addNewPhoto(productPhoto, restaurantCode, productId));
             return ResponseEntity.ok(productPhotoModel);
         } catch (RestaurantNotFoundException | ProductNotFoundException e) {
             throw new BusinessException(e.getMessage());

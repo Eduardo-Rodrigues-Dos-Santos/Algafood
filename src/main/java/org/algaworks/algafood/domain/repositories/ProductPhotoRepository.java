@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ProductPhotoRepository extends JpaRepository<ProductPhoto, Long> {
 
-    @Query("select ph from ProductPhoto ph left join ph.product p where ph.id = :photoId and p.id = :productId")
+    @Query("select ph from ProductPhoto ph where ph.id = :photoId and ph.product.id = :productId")
     Optional<ProductPhoto> findPhotoByProduct(@Param("photoId") Long photoId, @Param("productId") Long productId);
 }

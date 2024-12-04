@@ -17,6 +17,8 @@ public class ProductPhoto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @Column(name = "file_name")
     private String fileName;
     private String description;
     private String contentType;

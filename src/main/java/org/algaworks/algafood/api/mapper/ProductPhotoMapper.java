@@ -14,7 +14,10 @@ public class ProductPhotoMapper {
     private ModelMapper modelMapper;
 
     public ProductPhoto toProductPhoto(ProductPhotoInput productPhotoInput) {
-        return modelMapper.map(productPhotoInput, ProductPhoto.class);
+        return modelMapper.typeMap(ProductPhotoInput.class, ProductPhoto.class)
+                .addMapping(src -> src.getPhoto().getContentType(), ProductPhoto::setContentType)
+                .addMapping(src -> src.getPhoto().getSize(), ProductPhoto::setSize)
+                .map(productPhotoInput);
     }
 
     public ProductPhotoModel productPhotoModel(ProductPhoto productPhoto) {

@@ -2,6 +2,7 @@ package org.algaworks.algafood.domain.services;
 
 import lombok.AllArgsConstructor;
 import org.algaworks.algafood.domain.exceptions.ProductNotFoundException;
+import org.algaworks.algafood.domain.exceptions.ProductPhotoNotFoundException;
 import org.algaworks.algafood.domain.models.Product;
 import org.algaworks.algafood.domain.models.ProductPhoto;
 import org.algaworks.algafood.domain.models.Restaurant;
@@ -60,7 +61,7 @@ public class ProductService {
     public ProductPhoto findPhotoById(String restaurantCode, Long productId, Long photoId){
         findByRestaurant(restaurantCode, productId);
         return productPhotoRepository.findPhotoByProduct(photoId, productId)
-                .orElseThrow(() -> new ProductNotFoundException(photoId));
+                .orElseThrow(() -> new ProductPhotoNotFoundException(photoId));
     }
 
     @Transactional

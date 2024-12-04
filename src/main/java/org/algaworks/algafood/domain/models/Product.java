@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -28,7 +29,7 @@ public class Product {
     private Boolean active;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductPhoto> productPhoto;
+    private List<ProductPhoto> productPhoto = new LinkedList<>();
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
