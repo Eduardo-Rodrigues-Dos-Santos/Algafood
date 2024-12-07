@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class ProductPhotoModel {
 
-    private Long id;
+    private String code;
     private String fileName;
     private String description;
     private String contentType;

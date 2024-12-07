@@ -1,5 +1,6 @@
 create table tb_product_photo (
 id bigint not null auto_increment,
+code varchar(40) not null,
 file_name varchar(40) not null,
 description varchar(255) not null,
 content_type varchar(10) not null,

@@ -7,6 +7,7 @@ import org.algaworks.algafood.api.models.ProductModel;
 import org.algaworks.algafood.api.models.input.ProductInput;
 import org.algaworks.algafood.core.security.security_annotations.CheckSecurity;
 import org.algaworks.algafood.domain.exceptions.BusinessException;
+import org.algaworks.algafood.domain.exceptions.ProductNotFoundException;
 import org.algaworks.algafood.domain.exceptions.RestaurantNotFoundException;
 import org.algaworks.algafood.domain.models.Product;
 import org.algaworks.algafood.domain.services.ProductService;
@@ -32,7 +33,7 @@ public class RestaurantProductController {
                                                               @RequestParam(required = false) boolean includeInactive) {
         Page<Product> products;
         try {
-            products = includeInactive ? productService.findAllByRestaurant(restaurantCode, pageable) :
+            products = includeInactive ? productService.findProductsByRestaurant(restaurantCode, pageable) :
                     productService.findAllActiveProductsByRestaurant(restaurantCode, pageable);
         } catch (RestaurantNotFoundException e) {
             throw new BusinessException(e.getMessage());
@@ -44,10 +45,10 @@ public class RestaurantProductController {
     @GetMapping("/{productId}")
     public ResponseEntity<ProductModel> findById(@PathVariable String restaurantCode, @PathVariable Long productId) {
         try {
-            Product product = productService.findByRestaurant(restaurantCode, productId);
+            Product product = productService.findProductByRestaurant(restaurantCode, productId);
             ProductModel productModel = productMapper.toProductModel(product);
             return ResponseEntity.ok(productModel);
-        } catch (RestaurantNotFoundException e) {
+        } catch (ProductNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
@@ -69,10 +70,10 @@ public class RestaurantProductController {
     public ResponseEntity<ProductModel> update(@PathVariable String restaurantCode, @PathVariable Long productId,
                                                @RequestBody @Valid ProductInput productInput) {
         try {
-            Product currentProduct = productService.findByRestaurant(restaurantCode, productId);
+            Product currentProduct = productService.findProductByRestaurant(restaurantCode, productId);
             productMapper.copyToDomainObject(productInput, currentProduct);
             return ResponseEntity.ok(productMapper.toProductModel(productService.add(restaurantCode, currentProduct)));
-        } catch (RestaurantNotFoundException e) {
+        } catch (ProductNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }

@@ -1,3 +1,6 @@
+algafood:
+  localstorage: "/home/skip/Área de Trabalho"
+
 spring:
 
   datasource:

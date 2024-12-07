@@ -7,13 +7,12 @@ import lombok.AllArgsConstructor;
 import org.algaworks.algafood.domain.exceptions.BusinessException;
 import org.algaworks.algafood.domain.exceptions.EntityInUseException;
 import org.algaworks.algafood.domain.exceptions.EntityNotFoundException;
+import org.algaworks.algafood.domain.exceptions.FileNotFoundException;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +33,18 @@ import static org.algaworks.algafood.api.exceptionhandler.ProblemType.*;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private MessageSource messageSource;
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
+                                                                      HttpHeaders headers, HttpStatusCode status,
+                                                                      WebRequest request) {
+        return ResponseEntity.status(status).headers(headers).build();
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<Object> handlerPhotoNotFoundException() {
+        return ResponseEntity.notFound().build();
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handlerEntityNotFoundException(EntityNotFoundException ex, WebRequest webRequest) {
@@ -96,6 +107,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
                                                                    HttpStatusCode status, WebRequest request) {
+        String accept = request.getHeader("accept");
+        if (!accept.equals(MediaType.APPLICATION_JSON_VALUE)) {
+            return ResponseEntity.status(status).headers(headers).build();
+        }
+
         String detail = String.format(ProblemMessage.NON_EXISTENT_RESOURCE.getMessage(), ex.getRequestURL());
         Problem problem = createProblemBuilder(HttpStatus.valueOf(status.value()), RESOURCE_NOT_FOUND, detail).build();
         return handleExceptionInternal(ex, problem, headers, status, request);
